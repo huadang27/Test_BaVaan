@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Submit</title>
+    <style>
+    .form-container {
+        max-width: 400px;
+        margin: 0 auto;
+    }
+    .form-container div {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+    label {
+        width: 30%;
+        text-align: right;
+        margin-right: 10px;
+    }
+    input, select {
+        flex: 1;
+        padding: 5px;
+    }
+    .result {
+        margin-top: 20px;
+    }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <form id="myForm">
+            <div>
+                <label for="phoneNumber">Số điện thoại:</label>
+                <input type="text" id="phoneNumber" name="phoneNumber" required>
+            </div>
+            <div>
+                <label for="email">Email:</label>
+                <input type="text" id="email" name="email" required>
+            </div>
+            <div>
+                <label for="province">Chọn tỉnh / thành phố:</label>
+                <select id="province" name="province" required>
+                    <option value="">Chọn tỉnh / thành phố</option>
+                    <option value="Hanoi">Hà Nội</option>
+                    <option value="HCMC">TP.HCM</option>
+                </select>
+            </div>
+            <div>
+                <label for="district">Chọn quận / huyện:</label>
+                <select id="district" name="district" required>
+                    <option value="">Chọn quận / huyện</option>
+                </select>
+            </div>
+            <div>
+                <button type="submit">Submit</button>
+            </div>
+        </form>
+        <div class="result">
+            <h3>Kết quả:</h3>
+            <p id="resultData"></p>
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById("myForm");
+        const resultData = document.getElementById("resultData");
+        const provinceSelect = document.getElementById("province");
+        const districtSelect = document.getElementById("district");
+
+        const districtData = {
+            Hanoi: ["Thanh xuânn", "Hoàng mai ", "Cầu Giayas"],
+            HCMC: ["Quận 1", "Quận 2", "Quận 3"]
+        };
+//check đk 
+        provinceSelect.addEventListener("change", function () {
+            const selectedProvince = this.value;
+            districtSelect.innerHTML = '<option value="">Chọn quận / huyện</option>';  
+            if (selectedProvince in districtData) {
+                districtData[selectedProvince].forEach((district) => {
+                    const option = document.createElement("option");
+                    option.value = district;
+                    option.textContent = district;
+                    districtSelect.appendChild(option);
+                });
+            }
+        });
+// lấy data
+        form.addEventListener("submit", function (e) {
+            e.preventDefault();
+            const phoneNumber = document.getElementById("phoneNumber").value;
+            const email = document.getElementById("email").value;
+            const selectedProvince = provinceSelect.options[provinceSelect.selectedIndex].text;
+            const selectedDistrict = districtSelect.options[districtSelect.selectedIndex].text;
+
+            resultData.textContent = `Số điện thoại: ${phoneNumber}, Email: ${email}, Tỉnh/Thành phố: ${selectedProvince}, Quận/Huyện: ${selectedDistrict}`;
+        });
+    </script>
+</body>
+</html>
